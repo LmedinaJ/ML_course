@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/332005908175271811/e5ecb605eaf84c54adc047e9d0abdf31/artifacts
+end_time: 1739715273898
+entry_point_name: ''
+experiment_id: '332005908175271811'
+lifecycle_stage: active
+run_id: e5ecb605eaf84c54adc047e9d0abdf31
+run_name: method-batch-lr-0.0001-mt-0.3-xavier-True-reg-Lasso
+run_uuid: e5ecb605eaf84c54adc047e9d0abdf31
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1739715265437
+status: 3
+tags: []
+user_id: lujem

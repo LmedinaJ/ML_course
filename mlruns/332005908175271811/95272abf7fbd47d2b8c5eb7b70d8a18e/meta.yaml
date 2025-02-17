@@ -1,0 +1,16 @@
+artifact_uri: mlflow-artifacts:/332005908175271811/95272abf7fbd47d2b8c5eb7b70d8a18e/artifacts
+deleted_time: 1739714600953
+end_time: 1739714593406
+entry_point_name: ''
+experiment_id: '332005908175271811'
+lifecycle_stage: deleted
+run_id: 95272abf7fbd47d2b8c5eb7b70d8a18e
+run_name: Fold-1
+run_uuid: 95272abf7fbd47d2b8c5eb7b70d8a18e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1739714592627
+status: 3
+tags: []
+user_id: lujem

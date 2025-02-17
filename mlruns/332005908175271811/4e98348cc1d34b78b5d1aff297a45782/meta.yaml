@@ -1,0 +1,16 @@
+artifact_uri: mlflow-artifacts:/332005908175271811/4e98348cc1d34b78b5d1aff297a45782/artifacts
+deleted_time: 1739715743735
+end_time: null
+entry_point_name: ''
+experiment_id: '332005908175271811'
+lifecycle_stage: deleted
+run_id: 4e98348cc1d34b78b5d1aff297a45782
+run_name: method-sto-lr-0.01-mt-0.3-xavier-True-reg-Lasso
+run_uuid: 4e98348cc1d34b78b5d1aff297a45782
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1739715589021
+status: 1
+tags: []
+user_id: lujem

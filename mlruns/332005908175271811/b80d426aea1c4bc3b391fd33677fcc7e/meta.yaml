@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/332005908175271811/b80d426aea1c4bc3b391fd33677fcc7e/artifacts
+end_time: 1739715124807
+entry_point_name: ''
+experiment_id: '332005908175271811'
+lifecycle_stage: active
+run_id: b80d426aea1c4bc3b391fd33677fcc7e
+run_name: method-batch-lr-0.01-mt-0.3-xavier-False-reg-Ridge
+run_uuid: b80d426aea1c4bc3b391fd33677fcc7e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1739715117267
+status: 3
+tags: []
+user_id: lujem

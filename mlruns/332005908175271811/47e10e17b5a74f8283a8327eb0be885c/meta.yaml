@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/332005908175271811/47e10e17b5a74f8283a8327eb0be885c/artifacts
+end_time: 1739715291909
+entry_point_name: ''
+experiment_id: '332005908175271811'
+lifecycle_stage: active
+run_id: 47e10e17b5a74f8283a8327eb0be885c
+run_name: method-batch-lr-0.0001-mt-0.3-xavier-True-reg-Poly
+run_uuid: 47e10e17b5a74f8283a8327eb0be885c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1739715282105
+status: 3
+tags: []
+user_id: lujem
