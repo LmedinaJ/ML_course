@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request, Form
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 import numpy as np
+import dill
 import pickle
 
 ### to replace blank values in the form 
@@ -16,14 +17,16 @@ replace_values = {
 }
 
 # Load the model from disk
-filename = 'app/car-price.model'
-loaded_model = pickle.load(open(filename, 'rb'))
+filename_rf = 'car-price.model'
+rf_model = pickle.load(open(filename_rf, 'rb'))
+filename_poly = 'car-price-poly-mini-lr-001-momentum03-xavier-false-dill.model'
+poly_model = dill.load(open(filename_poly, 'rb'))#pickle.load(open(filename_poly, 'rb'))
 
 # load the scaler
-with open("app/scaler.pkl", "rb") as scaler_file:
+with open("scaler.pkl", "rb") as scaler_file:
     scaler = pickle.load(scaler_file)
 
-templates =  Jinja2Templates(directory='app/templates')
+templates =  Jinja2Templates(directory='templates')
 
 # Define the Pydantic model for input validation
 class PredictionRequest(BaseModel):
@@ -33,37 +36,49 @@ app = FastAPI()
 
 @app.get('/')
 async def read_root(request: Request):
-    return templates.TemplateResponse('index.html',
-                                      {'request':request,
-                                       'name':'testeo'})
-    #return {'message': 'Model for car price predictions'}
+    return templates.TemplateResponse('index.html', {'request': request})
 
 @app.post("/submit")
-def handle_form(car_year = Form(...), engine = Form(...),
-                max_power = Form(...), transmission = Form(...),
-                owner = Form(...), km_driven = Form(...),
-                fuel = Form(...)):
+async def handle_form(
+    request: Request,
+    car_year: str = Form(...),
+    engine: str = Form(...),
+    max_power: str = Form(...),
+    transmission: str = Form(...),
+    owner: str = Form(...),
+    km_driven: str = Form(...),
+    fuel: str = Form(...),
+    model_choice: str = Form(...)
+):
+    def to_float_or_default(value: str, default: float):
+        return float(value.strip()) if value.strip() != "" else default
     
-    if car_year == 0 or car_year == '':
-        car_year = replace_values['car_old']
-    if engine == 0  or engine == '':
-        engine = replace_values['engine']
-    if max_power == 0  or max_power == '':
-        max_power = replace_values['max_power']
-    if transmission == 0  or transmission == '':
-        transmission = replace_values['transmission']
-    if owner == 0  or owner == '':
-        owner = replace_values['owner']
-    if km_driven == 0  or km_driven == '':
-        km_driven = replace_values['km_driven']
-    if fuel == 0  or fuel == '':
-        fuel = replace_values['fuel']
-    
+    car_year = to_float_or_default(car_year, replace_values['car_old'])
+    engine = to_float_or_default(engine, replace_values['engine'])
+    max_power = to_float_or_default(max_power, replace_values['max_power'])
+    transmission = to_float_or_default(transmission, replace_values['transmission'])
+    owner = to_float_or_default(owner, replace_values['owner'])
+    km_driven = to_float_or_default(km_driven, replace_values['km_driven'])
+    fuel = to_float_or_default(fuel, replace_values['fuel'])
+
+
+    # Prepare input features (example transformation)
     values = np.array([[2025 - car_year, np.log(engine), max_power, transmission, owner, np.log(km_driven), fuel]])
     values = scaler.transform(values)
-    predicted_price_car = loaded_model.predict(values)
 
-    return {"car_price": np.round(np.exp(predicted_price_car)).item()}
+    # Use the model_choice to select which model to use.
+    if model_choice == "random_forest":
+        # Use RandomForest model 
+        predicted_price_car = rf_model.predict(values)
+    if model_choice == "polynomial_regression":
+        # Use polynomial regression model 
+        predicted_price_car = poly_model.predict(values)
+    
+    # Calculate final car price prediction (applying inverse transformation if needed)
+    predicted_price = np.round(np.exp(predicted_price_car)).item()
+
+    # Render the same page (index.html) and pass the predicted price to the template.
+    return templates.TemplateResponse("index.html", {"request": request, "car_price": predicted_price})
 
 @app.post('/predict')
 def predict(data: PredictionRequest):
@@ -72,10 +87,13 @@ def predict(data: PredictionRequest):
         features = np.array(data.features).reshape(1, -1)
 
         # Make prediction
-        predicted_price_car = loaded_model.predict(features)
+        predicted_price_car = poly_model.predict(features)
 
         # Return the prediction (apply transformations if needed, e.g., exponentiation)
         return {'predicted_value': np.round(np.exp(predicted_price_car)).item()}
     except Exception as e:
         return {'error': str(e)}
 
+if __name__ == '__main__':
+    import uvicorn
+    uvicorn.run("server:app", host="0.0.0.0", port=80, reload=True)

@@ -1,71 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Car prediction model</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        form {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-        label {
-            font-weight: bold;
-            margin-bottom: 5px;
-            display: block;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Car Price Prediction</title>
+  <!-- Bootstrap CSS -->
+  <link 
+    rel="stylesheet" 
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" 
+    crossorigin="anonymous">
 </head>
 <body>
- 
-    <form action="/submit" method="post">
-        <h3> fill this form to get a price estimate for your car.
-         If you leave any space in blank the model will fill it with the
-         median value for that varaible</h3>
-        <label for="car_year">Car year:</label>
-        <input type="number" id="car_year" name="car_year">
+  <div class="container mt-5">
+    <h2 class="text-center mb-4">Car Price Prediction</h2>
+    
+    <!-- Instruction text -->
+    <p class="text-center">
+      Fill this form to get a price estimate for your car.
+      If you leave any space blank, the model will fill it with the median value for that variable.
+    </p>
+    
+    <!-- Accordion for the form -->
+    <div id="formAccordion">
+      <div class="card">
+        <div class="card-header" id="headingForm">
+          <h5 class="mb-0">
+            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseForm" aria-expanded="true" aria-controls="collapseForm">
+              Show/Hide Form
+            </button>
+          </h5>
+        </div>
+        <div id="collapseForm" class="collapse show" aria-labelledby="headingForm" data-parent="#formAccordion">
+          <div class="card-body">
+            <form action="/submit" method="post" class="needs-validation" novalidate>
+              <div class="form-group">
+                <label for="car_year">Car Year:</label>
+                <input type="number" class="form-control" id="car_year" name="car_year" required>
+              </div>
+              <div class="form-group">
+                <label for="engine">Engine:</label>
+                <input type="number" class="form-control" id="engine" name="engine" required>
+              </div>
+              <div class="form-group">
+                <label for="max_power">Max Power:</label>
+                <input type="number" class="form-control" id="max_power" name="max_power" required>
+              </div>
+              <div class="form-group">
+                <label for="transmission">Transmission:</label>
+                <select class="form-control" id="transmission" name="transmission" required>
+                  <option value="0">Manual</option>
+                  <option value="1">Automatic</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="owner">Owner:</label>
+                <input type="number" class="form-control" id="owner" name="owner" required>
+              </div>
+              <div class="form-group">
+                <label for="km_driven">KM Driven:</label>
+                <input type="number" class="form-control" id="km_driven" name="km_driven" required>
+              </div>
+              <div class="form-group">
+                <label for="fuel">Fuel:</label>
+                <select class="form-control" id="fuel" name="fuel" required>
+                  <option value="0">Diesel</option>
+                  <option value="1">Petrol</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Optionally, display the predicted price if available -->
+    {% if car_price is defined %}
+      <div class="alert alert-info mt-4" role="alert">
+        <strong>Predicted Car Price:</strong> {{ car_price }}
+      </div>
+    {% endif %}
+  </div>
 
-        <label for="engine">Engine:</label>
-        <input type="number" id="engine" name="engine">
-
-        <label for="max_power">Max power:</label>
-        <input type="number" id="max_power" name="max_power">
-
-        <label for="transmission">Transmission:</label>
-        <select id="transmission" name="transmission">
-            <option value=0>Manual</option>
-            <option value=1>Automatic</option>
-        </select>
-        <!-- <input type="number" id="transmission" name="transmission"> -->
-
-        <label for="owner">Owner:</label>
-        <input type="number" id="owner" name="owner">
-
-        <label for="km_driven">KM Driven:</label>
-        <input type="number" id="km_driven" name="km_driven">
-
-        <label for="fuel">Fuel:</label>
-        <select id="fuel" name="fuel">
-            <option value=0>Diesel</option>
-            <option value=1>Petrol</option>
-        </select>
-        <!-- <input type="number" id="fuel" name="fuel"> -->
-
-        <input type="submit" value="Submit">
-    </form>
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
 </body>
 </html>
